@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <style>
+    @keyframes flickerAnimation {
+      0%   { opacity:1; }
+      50%  { opacity:0; }
+      100% { opacity:1; }
+    }
+    @-o-keyframes flickerAnimation{
+      0%   { opacity:1; }
+      50%  { opacity:0; }
+      100% { opacity:1; }
+    }
+    @-moz-keyframes flickerAnimation{
+      0%   { opacity:1; }
+      50%  { opacity:0; }
+      100% { opacity:1; }
+    }
+    @-webkit-keyframes flickerAnimation{
+      0%   { opacity:1; }
+      50%  { opacity:0; }
+      100% { opacity:1; }
+    }
+    .animate-flicker {
+       -webkit-animation: flickerAnimation .8s infinite;
+       -moz-animation: flickerAnimation .8s infinite;
+       -o-animation: flickerAnimation .30s infinite;
+      animation: flickerAnimation .8s infinite;
+    }
+    </style>
+
+
+<body>
+<div class="row"  >
+  <div class="col-md-12">
+      <figure class="col-md-4">
+       
+      </figure>
+       
+    
+      <figure class="col-md-4" >
+        <button  class="animate-flicker" style="width: 100%;height: 220px ;background-image: url(images/summerReka.jpg); border: none;" ></button>
+      </figure>
+    
+
+      <figure class="col-md-4" >
+        <button style="width: 100%;height: 220px ; background-image: url(images/blueReka.png); border: none; font-size: 30px; color: white; text-shadow: 2px 2px gray;"><b>גאדג'טים</b></button>
+      </figure>
+
+      
+    </div>
+
+  </div>
+</div>
+
+
+<div class="row"  >
+  <div class="col-md-12" style="padding-top: 30px;">
+      <figure class="col-md-4">
+       
+      </figure>
+
+      <figure class="col-md-4" >
+        <button style="width: 100%;height: 220px ;background-image: url(images/blueReka.png);border: none; font-size: 30px; color: white; text-shadow: 2px 2px gray;"><b>מתנה לגבר</b></button>
+      </figure>
+
+      <figure class="col-md-4" >
+        <button style="width: 100%;height: 220px ;background-image: url(images/pinkReka.jpg);border: none; font-size: 30px; color: white; text-shadow: 2px 2px gray;"><b>מתנה לאישה</b></button>
+      </figure>
+
+      
+    </div>
+
+  </div>
+</div>
+</body>
+
+</html>

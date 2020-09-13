@@ -1,0 +1,242 @@
+<!--
+<style>
+	@keyframes flickerAnimation {
+	  0%   { opacity:1; }
+	  50%  { opacity:0; }
+	  100% { opacity:1; }
+	}
+	@-o-keyframes flickerAnimation{
+	  0%   { opacity:1; }
+	  50%  { opacity:0; }
+	  100% { opacity:1; }
+	}
+	@-moz-keyframes flickerAnimation{
+	  0%   { opacity:1; }
+	  50%  { opacity:0; }
+	  100% { opacity:1; }
+	}
+	@-webkit-keyframes flickerAnimation{
+	  0%   { opacity:1; }
+	  50%  { opacity:0; }
+	  100% { opacity:1; }
+	}
+	.animate-flicker {
+	   -webkit-animation: flickerAnimation .8s infinite;
+	   -moz-animation: flickerAnimation .8s infinite;
+	   -o-animation: flickerAnimation .8s infinite;
+		animation: flickerAnimation .8s infinite;
+	}
+	</style>
+	
+	<body id="body">
+	
+	<div style="text-align: center; font-size: 30px;">
+		<table style="width: 100%; direction: rtl;">
+			<tr>
+				<td colspan="2" style="text-align: center; padding: 0px 80px 20px 80px;">
+					<div class="animate-flicker" id="mivzaim1"  style=" text-align: center; border: 2px solid #da0e00; height: 130px; border-radius: 20px; background-image: url(images/summer.jpg);">
+					 <div style="height: 130px; color: red; border-radius: 20px; padding: 20px 20px 0px 20px; background-color: rgba(51,34,34,0);">    מבצעים
+					</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="width: 50%; padding: 0px 80px 20px 45px;">
+				
+					<div id="sheik" style="border: 2px solid #da0e00; height: 230px; border-radius: 20%;  background-size: 380px 250px; background-image: url(images/green.jpg);">
+					 <div style="height: 196px; border-radius: 20%; color: red; padding: 20px 20px 20px 20px; ">שייקים
+					</div>
+					</div>
+				</td>
+				<td style="width: 50%; padding: 0px 45px 20px 80px;">
+					<div id="yugurt" style=" border: 2px solid #da0e00; height: 230px; border-radius: 20%;  background-size: 380px 250px;
+					background-image: url(images/yugurt.jpg);
+					
+					background-repeat: no-repeat, no-repeat, no-repeat;">
+					 <div style="height: 196px; color: red; border-radius: 20%; padding: 20px 20px 20px 20px; ">יוגורט
+					</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+		<div id="connectEmail" value=<%=user_email%> ></div>
+	
+	</div> 
+	</body>
+	<script>
+	//צריך להוסיף להם פרמטרים..
+		$("#mivzaim1").click( function(e) { //mivzaim
+			e.preventDefault();
+			$.ajax({
+					url: '/allMivzaim/'+ $("#connectEmail").attr("value"),
+					type: 'POST',
+					success: function(html){
+						$('#mainContent').html(html);
+					},
+					error: function(res, e ,typeErr){
+						alert("error - " + typeErr);	
+					}
+				});
+						myFunction();
+	
+		});
+		
+		$("#sheik").click( function(e) { //sheik
+			e.preventDefault();	
+			$.ajax({
+					url: '/foodList/'+ $("#connectEmail").attr("value"),
+					type: 'POST',
+					data: { kind: "smooth" },
+					success: function(html){
+						$('#mainContent').html(html);
+					},
+					error: function(res, e ,typeErr){
+						alert("error - " + typeErr);	
+					}
+				});
+						myFunction();
+	
+		});
+		
+		$("#yugurt").click( function(e) { //yugurt
+			e.preventDefault();	
+			$.ajax({
+					url: '/foodList/'+ $("#connectEmail").attr("value"),
+					type: 'POST',
+					data: { kind: "yogurt" },
+					success: function(html){
+						$('#mainContent').html(html);
+					},
+					error: function(res, e ,typeErr){
+						alert("error - " + typeErr);	
+					}
+				});
+			myFunction();
+		});
+	</script>
+-->
+
+<!DOCTYPE html>
+<html>
+  <style>
+    @keyframes flickerAnimation {
+      0%   { opacity:1; }
+      50%  { opacity:0; }
+      100% { opacity:1; }
+    }
+    @-o-keyframes flickerAnimation{
+      0%   { opacity:1; }
+      50%  { opacity:0; }
+      100% { opacity:1; }
+    }
+    @-moz-keyframes flickerAnimation{
+      0%   { opacity:1; }
+      50%  { opacity:0; }
+      100% { opacity:1; }
+    }
+    @-webkit-keyframes flickerAnimation{
+      0%   { opacity:1; }
+      50%  { opacity:0; }
+      100% { opacity:1; }
+    }
+    .animate-flicker {
+       -webkit-animation: flickerAnimation .8s infinite;
+       -moz-animation: flickerAnimation .8s infinite;
+       -o-animation: flickerAnimation .8s infinite;
+      animation: flickerAnimation .8s infinite;
+    }
+    </style>
+
+
+<body id="body">
+<div>
+<div class="row" style="width: 95%;" >
+  <div class="col-md-12">
+
+      <figure class="col-md-6" >
+        <button  class="animate-flicker" id="mivzaim1" style="width: 100%;height: 220px ;background-image: url(images/summerReka.jpg); border: none;" ></button>
+      </figure>
+    
+
+      <figure class="col-md-6" >
+        <button id="sheik" style="width: 100%;height: 220px ; background-image: url(images/blueReka.png); border: none; font-size: 30px; color: white; text-shadow: 2px 2px gray;"><b>גאדג'טים</b></button>
+      </figure>
+
+      
+    </div>
+
+</div>
+
+
+<div class="row" style="width: 95%;" >
+  <div class="col-md-12" style="padding-top: 30px;">
+
+      <figure class="col-md-6" >
+        <button id="yugurt" style="width: 100%;height: 220px ;background-image: url(images/blueReka.png);border: none; font-size: 30px; color: white; text-shadow: 2px 2px gray;"><b>מתנה לגבר</b></button>
+      </figure>
+
+      <figure class="col-md-6" >
+        <button style="width: 100%;height: 220px ;background-image: url(images/pinkReka.jpg);border: none; font-size: 30px; color: white; text-shadow: 2px 2px gray;"><b>מתנה לאישה</b></button>
+      </figure>
+
+      
+    </div>
+
+</div>
+  <div id="connectEmail" value=<%=user_email%> ></div>
+</div>
+
+
+<script>
+	//צריך להוסיף להם פרמטרים..
+		$("#mivzaim1").click( function(e) { //mivzaim
+			e.preventDefault();
+			$.ajax({
+					url: '/allMivzaim/'+ $("#connectEmail").attr("value"),
+					type: 'POST',
+					success: function(html){
+						$('#mainContent').html(html);
+					},
+					error: function(res, e ,typeErr){
+						alert("error - " + typeErr);	
+					}
+				});
+						myFunction();
+	
+		});
+		
+		$("#sheik").click( function(e) { //sheik
+			e.preventDefault();	
+			$.ajax({
+					url: '/foodList/'+ $("#connectEmail").attr("value"),
+					type: 'POST',
+					data: { kind: "smooth" },
+					success: function(html){
+						$('#mainContent').html(html);
+					},
+					error: function(res, e ,typeErr){
+						alert("error - " + typeErr);	
+					}
+				});
+						myFunction();
+	
+		});
+		
+		$("#yugurt").click( function(e) { //yugurt
+			e.preventDefault();	
+			$.ajax({
+					url: '/foodList/'+ $("#connectEmail").attr("value"),
+					type: 'POST',
+					data: { kind: "yogurt" },
+					success: function(html){
+						$('#mainContent').html(html);
+					},
+					error: function(res, e ,typeErr){
+						alert("error - " + typeErr);	
+					}
+				});
+			myFunction();
+		});
+	</script>
+	</body>
+</html>	

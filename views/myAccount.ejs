@@ -1,0 +1,70 @@
+<!-- views/myAccount.ejs -->
+<style>
+div {
+   color:black;
+}
+</style>
+<div class="container" style="padding-right: 80px; direction: rtl;">  
+	<div style="width: 400px; border: 1px solid #140000; border-radius: 20px; padding: 20px 20px 20px 20px; background-color: #6faf4c;">
+		<table style="font-size: 19px;">
+			<tr>
+			<td colspan="2" style="text-align: center; font-size: 22px;"><b>פרטי החשבון</b></td>
+			</tr>
+			<tr style="padding: 5px 5px 5px 0px;">	
+				<td style=" padding: 5px 5px 5px 0px;">
+					<b>מס' משתמש:</b>
+				</td>
+				<td style="padding: 5px 15px 5px 0px;">
+					<%= user.id %> <br/>
+				</td>
+			</tr>
+			<tr style="padding: 5px 5px 5px 0px;">	
+				<td style=" padding: 5px 5px 5px 0px;">
+					<b>קטגוריה:</b>
+				</td>
+				<td style="padding: 5px 15px 5px 0px;">
+					<%switch (user.category) {
+						case "worker":%>עובד
+						<% break; case "deliver":%>ברמן
+						<% break; case "client":%>לקוח
+						<% break; %>
+					<% }%>
+					 <br/>
+				</td>
+			</tr>
+			<tr>
+				<td style="padding: 5px 5px 5px 0px;">
+					<b>שם משתמש:</b>
+				</td>
+				<td style="padding: 5px 15px 5px 0px;">
+					<%= user.name %>
+				</td>
+			</tr>
+			<tr>
+				<td style="padding: 5px 5px 5px 0px;">
+					<b>טלפון:</b>
+				</td>
+				<td style="padding: 5px 15px 5px 0px;">
+					<%= user.tel %>
+				</td>
+			</tr>
+			<tr>
+				<td style="padding: 5px 5px 5px 0px;">
+					<b>דוא"ל:</b>
+				</td>
+				<td style="padding: 5px 15px 5px 0px;">
+					<%= user.email %>
+				</td>
+			</tr>
+			<tr>
+				<td style="padding: 5px 5px 5px 0px;">
+					<b>כתובת:</b>
+				</td>
+				<td style="padding: 5px 15px 5px 0px;">
+					<%= user.address %>
+				</td>
+			</tr>
+		</table>
+	</div>	
+</div>
+   

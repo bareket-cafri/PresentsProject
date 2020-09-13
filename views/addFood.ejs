@@ -1,0 +1,203 @@
+<!-- views/addfםםג.ejs -->
+<style>
+	div {
+	   color:black;
+	}
+	#borderimg { 
+	  border: 10px solid transparent;
+	  padding: 15px;
+	  border-image: url(images/border.png) 30 round;
+	}
+	</style>
+	<div class="container" style="text-align: center; direction: rtl; padding-right: 80px;">
+			<div id="borderimg" style=" border-radius: 20px; padding: 10px 10px 10px 10px; background-color: #6faf4c;">
+				<div class="panel-heading" style="text-align: center; font-size: 22px;"><b>הוספת פריט</b></div>
+				<div class="panel-body" style="text-align: center; font-size: 17px; margin-right: 10px;">
+					<form id="addFoodForm" style="text-align: right;" enctype="multipart/form-data">
+						<div class="form-group">סוג הפריט: 
+							<input type="radio" id="issmooth" value="smooth"; name="kind1"/> שייק						
+							<input type="radio" id="isyogurt" value="yogurt"; name="kind1"/> יוגורט		
+						</div>
+						<div class="form-group">האם מבצע? 
+							<input type="radio" id="miv" value="1"; name="isMivza1" value="smooth"/> כן						
+							<input type="radio" id="notmiv" value="0"; name="isMivza1" value="yogurt"/> לא		
+						</div>
+						<table>
+							<tr>
+								<td style="vertical-align: top; padding-top: 6px;">שם הפריט: </td>
+								<td style="padding-right: 10px;">
+									<div class="form-group"> 
+										<input id="name" name="name" type="text" class="form-control" placeholder="שם" style="Border-color: #000000; font-size: 17px; display:inline; background-color: #6faf4c; color: #S; width: 250px;"/>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td style="vertical-align: top; padding-top: 6px;">תיאור הפריט: </td>
+								<td style="padding-right: 10px;">
+									<div class="form-group">
+	
+										<textarea id="description" name="description" class="form-control" placeholder="תיאור" style="Border-color: #000000; font-size: 17px; display:inline; background-color: #6faf4c; color: #000000; width: 250px;"/>	
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td style="vertical-align: top; padding-top: 6px;" >מחיר הפריט: </td>
+								<td style="padding-right: 10px;">
+									<div class="form-group">
+										<input id="cost" name="cost" type="number" class="form-control" placeholder="מחיר" style="Border-color: #000000; font-size: 17px; display:inline; background-color: #6faf4c; color: #000000; width: 100px;" />
+									</div>
+								</td>
+							</tr>
+						</table>
+						<div class="form-group">
+							<label for="imgsrc"><span class="glyphicon glyphicon-picture"></span> תמונה</label> <br/>
+							<input type="radio" id="imgFile" name="imgsrc" value="file_src"/> תמונה מהמחשב <br/>
+							<input type="file" id="img_file" name="img_file" placeholder="בחר תמונה" />
+							<input type="radio" id="imgUrl" name="imgsrc" value="url_src"/> תמונה מURL <br/>		
+							<input type="text" id="img_url" name="img_url" class="form-control" placeholder="הכנס URL של תמונה" style="font-size: 17px; background-color: #000000; color: #000000; width: 250px;"/>
+						</div>
+						<div style="text-align: center;">
+						<button id="addFoodbtn" class="btn btn-default" style="background-color:#da0e00">הוסף</button>
+						</div>
+					</form>
+				</div>
+	</div>
+			</div>
+	<script>
+		$("#img_file").hide();
+		$("#img_url").hide();
+		
+			
+		$("#addFoodbtn").click(function(e) {
+			e.preventDefault();
+				//alert("click");
+				
+				var kindF = $('input[name=kind1]:checked').val();
+				var isMivF = $('input[name=isMivza1]:checked').val();
+				var nameF = $("#name").val();
+				var descriptionF = $("#description").val();
+				var costF = $("#cost").val();
+				var imgUrlF;
+				var imgFileF;
+				var typeSrc = $('input[name=imgsrc]:checked').val();
+				if(kindF == null || isMivF == null || nameF == "" || costF == ""){
+					alert("פרטים חסרים");
+					return;
+					}
+				$(".textLoader").html('מוסיף פריט..');
+				$(".loadingDiv").hide();
+				
+			if (typeSrc == "file_src") { //תמונה מהמחשב
+					//alert("image from file");
+					imgFileF = $("#img_file").val();
+					//alert(imgFileF);
+					var file = document.getElementById('img_file').files[0];
+					if (file) {                                              // Do we have the file?
+					   //alert("yes file");
+					   var xhr = new XMLHttpRequest();
+					   if (xhr.upload) {                               // Does the browser know to upload? (AJAX2)
+						  // start upload
+						  //alert(file.name);
+						  //$("#addFlowerForm").attr("action")
+						  xhr.open("POST", "/upload", true);
+						  xhr.setRequestHeader("X_FILENAME", file.name);   // Add the file name to the header
+						  xhr.onload = function () {
+							 if (xhr.status === 200) {
+								// File(s) uploaded.
+								alert("uploadV");
+								$.ajax({
+									url: '/addFood',
+									type: 'POST',
+									data: { kind: kindF, isMiv: isMivF, name: nameF, description: descriptionF, cost: costF, path: "images/"+file.name },
+									success: function(res){
+										$(".loadingDiv").hide();
+										//alert("הורד");
+										alert("הפריט נוסף בהצלחה");
+										$.get('/foodList', function(html){
+											//alert("hi");
+											$('#mainContent').html(html);
+										});
+									},
+									error: function(res, e ,typeErr){
+										$(".loadingDiv").hide();
+										alert("שגיאה");
+									}
+								});				
+								
+								//$("#upBtn").val("Upload");
+							 } else {
+								$(".loadingDiv").hide();
+								 alert('An error occurred!');
+								 }
+							 };
+						  xhr.send(file);                              // And now sending the file
+					   } else {
+								 //alert("upload2");
+							 //$("#upBtn").val("Upload");
+						  }
+					}
+					else {
+						$(".loadingDiv").hide();
+						alert("לא נבחר קובץ");
+					}
+				}
+				else if(typeSrc == "url_src") { //תמונה מURL
+					//alert("image from url");
+					imgUrlF = $("#img_url").val();
+					if( imgUrlF=="" ){
+						alert("לא הוכנס URL");
+						return;
+						}
+					$.ajax({
+						url: '/addFlowerIImgUrl',
+						type: 'POST',
+						data: { name: nameF, imgUrl: imgUrlF},
+						success: function(res){
+						
+							alert("הורד");
+							//var filename1 = res.name;
+							//alert("2הפרח נוסף בהצלחה");
+							
+							$.ajax({
+								url: '/addFood',
+								type: 'POST',
+								data: { kind: kindF, isMiv: isMiv, name: nameF, description: descriptionF, cost: costF, path: "images/"+res.name+".png" },
+								success: function(res){
+									$(".loadingDiv").hide();
+									alert("הפריט נוסף בהצלחה");
+									$.get('/foodList', function(html){
+										//alert("hi");
+										$('#mainContent').html(html);
+									});
+								},
+								error: function(res, e ,typeErr){
+									$(".loadingDiv").hide();
+									alert("שגיאה");
+								}
+							});
+						},
+						error: function(res, e ,typeErr){
+							$(".loadingDiv").hide();
+							alert("שגיאה");
+						}
+					});
+					
+					}
+					else {
+						$(".loadingDiv").hide();
+						alert("חסרה תמונה");
+					}
+		});
+	
+		
+		$("input[type=radio][name=imgsrc]").change (function () {
+			if(this.value == "url_src") {
+				$("#img_file").hide();
+				$("#img_url").show();
+			}
+			else if(this.value == "file_src") {
+				$("#img_file").show();
+				$("#img_url").hide();
+			}
+		});
+	</script>

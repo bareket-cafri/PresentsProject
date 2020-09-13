@@ -1,0 +1,126 @@
+<!-- views/adduser.ejs -->
+<style>
+div {
+   color:black;
+}
+#borderimg { 
+  border: 10px solid transparent;
+  padding: 15px;
+  border-image: url(images/border.png) 30 round;
+}
+</style>
+<div class="container" style="text-align: center; direction: rtl; padding-right: 80px;">  
+	<div id="borderimg" style=" border-radius: 20px; padding: 10px 10px 10px 10px; background-color: #6faf4c;">
+		<div class="panel-heading" style="text-align: center; font-size: 22px;"><b>הוספת משתמש</b></div>
+		
+		<!--<div class="panel-heading" style="text-align: center; font-size: 22px;"><b>הוספת לקוח</b></div>-->
+		<div class="panel-body" style="text-align: center; font-size: 17px; margin-right: 10px;">
+			<form id="addFlowerForm" style="text-align: right;" enctype="multipart/form-data">
+				<div class="form-group">סוג המשתמש: 
+					<input type="radio" id="isWorker" value="worker"; name="category1"/> עובד						
+					<input type="radio" id="isdeliver" value="deliver"; name="category1"/> ברמן						
+					<input type="radio" id="isClient" value="client"; name="category1"/> לקוח		
+				</div>
+				<table>
+					<tr>
+						<td style="vertical-align: top; padding-top: 6px; ">שם המשתמש: </td>
+						<td style="padding-right: 10px;">
+							<div class="form-group"> 
+								<input id="name1" type="text" class="form-control" placeholder="שם" style="Border-color: #000000; font-size: 17px; display:inline; background-color: #6faf4c; color: #000000; width: 250px;"/>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td style="vertical-align: top; padding-top: 6px;">סיסמא: </td>
+						<td style="padding-right: 10px;">
+							<div class="form-group">
+								<input id="password" type="password" class="form-control" placeholder="סיסמא" style="Border-color: #000000; font-size: 17px; display:inline; background-color: #6faf4c; color: #000000; width: 250px;"/>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td style="vertical-align: top; padding-top: 6px;" >מייל: </td>
+						<td style="padding-right: 10px;">
+							<div class="form-group">
+								<input id="email11" type="email" class="form-control" placeholder="מייל" style="Border-color: #000000; font-size: 17px; display:inline; background-color: #6faf4c; color: #000000; width: 250px;" />
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td style="vertical-align: top; padding-top: 6px;" >טלפון: </td>
+						<td style="padding-right: 10px;">
+							<div class="form-group">
+								<input id="tel11" type="text" class="form-control" placeholder="טלפון" style="Border-color: #000000; font-size: 17px; display:inline; background-color: #6faf4c; color: #000000; width: 250px;" />
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td style="vertical-align: top; padding-top: 6px;" >כתובת: </td>
+						<td style="padding-right: 10px;">
+							<div class="form-group">
+								<input id="address11" type="text" class="form-control" placeholder="כתובת" style="Border-color: #000000; font-size: 17px; display:inline; background-color: #6faf4c; color: #000000; width: 250px;" />
+							</div>
+						</td>
+					</tr>
+				<table/>
+				<div style="text-align: center;">
+				<button id="addUser1" class="btn btn-default" style="background-color:#da0e00">הוסף משתמש</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div id="conEm" value=<%=connectUser.email%> ></div>
+<script>
+	$(document).ready(function(){
+		$("#ssss").click(function(e) {
+			var url = $("#conEm").attr("value");
+			var c = $("#conEm").val();
+			alert(url);
+			alert(c);
+		});
+	
+	
+		$("#addUser1").click(function(e) {
+			e.preventDefault();
+			var userCategory = $('input[name=category1]:checked').val();
+			var userName = $("#name1").val();
+			var userPassword = $("#password").val();
+			//var userPassword = document.getElementId("#pass1").value;
+			var userEmail = $("#email11").val();
+			//alert("tt "+ userEmail);
+			var userTel = $("#tel11").val();
+			var userAddress = $("#address11").val();
+			
+			/*if(userCategory == null || userName == "" || userPassword == "" || userEmail == "" || userTel == "" || userAddress == ""){
+				alert("פרטים חסרים");
+				return;
+				}*/
+			
+			$(".textLoader").html('מוסיף משתמש..');
+			$(".loadingDiv").show();
+			
+			$.ajax({
+				url: '/addUser',
+				type: 'POST',
+				data: { category: userCategory, name: userName, pass: userPassword, email: userEmail, tel: userTel , address: userAddress },
+				success: function(res){
+					$(".loadingDiv").hide();
+						$.get('/users/'+ $("#conEm").attr("value"), function(html){
+							$('#mainContent').html(html);
+							alert("המשתמש נוסף בהצלחה");
+							//$('#leftContent').html('');
+						});
+				},
+				error: function(res, e ,typeErr){
+					$(".loadingDiv").hide();
+					alert("error - " + typeErr);
+					$.get('/users/'+ $("#conEm").attr("value"), function(html){
+						$('#mainContent').html(html);
+						//$('#leftContent').html('');
+					});
+				}
+			});
+		});
+	});
+</script>

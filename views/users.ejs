@@ -1,0 +1,359 @@
+<!-- views/users.ejs -->
+
+<style>
+div {
+   color:black;
+ 
+}
+</style>
+
+<div ng-controller="usersController">
+	<div class="container" style="direction: rtl; padding-right: 80px;"> 
+		<!--<div style="width: 96%; height: 23px; font-size: 20px; text-align: left; margin-bottom: 8px; padding-left: 30px;">ss</div>-->
+		<div style="width: 96%; border: 1px solid #000000; border-radius: 20px; padding: 10px 10px 10px 10px; background-color: #6faf4c;">
+		<div style="text-align: right; font-size: 22px;">
+			<b>לקוחות</b>
+			<div class="container-1" style="margin-right: 800px; margin-top: -30px; padding:0;">
+				<span class="icon"><i class="fa fa-search" style=" color:black;"></i></span>
+				<input type="text" id="mySearchClient" class="form-control" placeholder="חיפוש..." onkeyup="mySearchFunctionClient()" style="background-color: #6faf4c; color: #000000; width: 210px; height: 30px;"/>				
+			</div>
+		</div>
+		<table id="clientsTable" style="width: 100%; ">
+			<tr style="text-align: right; font-size: 18px; border-bottom: 1px solid #000000;">	
+				<td style="width: 16%; padding: 5px 5px 5px 0px;">
+					<b>מס' משתמש</b>
+				</td>
+				<td style="width: 16%; padding: 5px 5px 5px 0px;">
+					<b>שם</b>
+				</td>
+				<td style="width: 16%; padding: 5px 5px 5px 0px;">
+					<b>טלפון</b>
+				</td>
+				<td style="width: 16%; padding: 5px 5px 5px 0px;">
+					<b>מייל</b>
+				</td>
+				<td style="width: 16%; padding: 5px 5px 5px 0px;">
+					<b>כתובת</b>
+				</td>
+				<td style="width: 16%; padding: 5px 5px 5px 0px;">
+					<b></b>
+				</td>
+			</tr>
+		<% for(i=0; i<users.length; i++) { %>
+			<% client=users[i];%>
+			<% if (client.category == "client" && client.isActive == 1) { %>
+			<tr style="text-align: right; font-size: 15px; border-bottom: 1px solid #000000;">	
+				<td style="padding: 5px 5px 5px 0px;">
+					<%= client.id %>
+				</td>
+				<td style="padding: 5px 5px 5px 0px;">
+					<%= client.name %>
+				</td>
+				<td style="padding: 5px 5px 5px 0px;">
+					<%= client.tel %>
+				</td>
+				<td style="padding: 5px 5px 5px 0px;">
+					<%= client.email %>
+				</td>
+				<td style="padding: 5px 5px 5px 0px;">
+					<%= client.address %>
+				</td>
+				<td style="padding: 5px 5px 5px 0px;">
+					<button class="removeUser" ng-click="removeUser()" id=<%= client.email %> style="background-color:#da0e00">הסר 
+					</button>
+				</td>
+			</tr>
+		<% } %>
+		<% } %>
+		</table>
+		</div>
+		<br/>
+		
+		<div  style="width: 96%; border: 1px solid #000000; border-radius: 20px; padding: 10px 10px 10px 10px; background-color: #6faf4c;">
+		<div style="text-align: right; font-size: 22px;">
+			<b>ברמנים</b>
+			<div class="container-1" style="margin-right: 800px; margin-top: -30px; padding:0;">
+				<span class="icon" ><i class="fa fa-search"></i></span>
+				<input type="text" id="mySearchdeliver" class="form-control" placeholder="חיפוש..." onkeyup="mySearchFunctiondeliver()" style="background-color: #6faf4c; color: #000000; width: 210px; height: 30px;"/>				
+			</div>
+		</div>
+		<table id="deliverTable" style="width: 100%; ">
+			<tr style="text-align: right; font-size: 18px; border-bottom: 1px solid #000000;">	
+				<td style="width: 16%; padding: 5px 5px 5px 0px;">
+					<b>מס' משתמש</b>
+				</td>
+				<td style="width: 16%; padding: 5px 5px 5px 0px;">
+					<b>שם</b>
+				</td>
+				<td style="width: 16%; padding: 5px 5px 5px 0px;">
+					<b>טלפון</b>
+				</td>
+				<td style="width: 16%; padding: 5px 5px 5px 0px;">
+					<b>מייל</b>
+				</td>
+				<td style="width: 16%; padding: 5px 5px 5px 0px;">
+					<b>כתובת</b>
+				</td>
+				<td style="width: 16%; padding: 5px 5px 5px 0px;">
+					<b></b>
+				</td>
+			</tr>
+		<% for(i=0; i<users.length; i++) { %>
+			<% deliver=users[i];%>
+			<% if (deliver.category == "deliver" && deliver.isActive == 1) { %>
+			<tr style="text-align: right; font-size: 15px; border-bottom: 1px solid #000000;">	
+				<td style="padding: 5px 5px 5px 0px;">
+					<%= deliver.id %>
+				</td>
+				<td style="padding: 5px 5px 5px 0px;">
+					<%= deliver.name %>
+				</td>
+				<td style="padding: 5px 5px 5px 0px;">
+					<%= deliver.tel %>
+				</td>
+				<td style="padding: 5px 5px 5px 0px;">
+					<%= deliver.email %>
+				</td>
+				<td style="padding: 5px 5px 5px 0px;">
+					<%= deliver.address %>
+				</td>
+				<td style="padding: 5px 5px 5px 0px;">
+					<% if (connectUser.category == "worker" && deliver.email != connectUser.email) { %>
+					<button class="removeUser" id=<%= deliver.email %> style="background-color:#da0e00">הסר 
+					</button>
+					<% } %>
+				</td>
+			</tr>
+		<% } %>
+		<% } %>
+		</table>
+		</div>	
+		<br/>
+		
+		<div  style="width: 96%; border: 1px solid #000000; border-radius: 20px; padding: 10px 10px 10px 10px; background-color: #6faf4c;">
+		<div style="text-align: right; font-size: 22px;">
+			<b>עובדים</b>
+			<div class="container-1" style="margin-right: 800px; margin-top: -30px; padding:0;">
+				<span class="icon"><i class="fa fa-search"></i></span>
+				<input type="text" id="mySearchWorker" class="form-control" placeholder="חיפוש..." onkeyup="mySearchFunctionWorker()" style="background-color: #6faf4c; color: #000000; width: 210px; height: 30px;"/>				
+			</div>
+		</div>
+		<table id="workerTable" style="width: 100%; ">
+			<tr style="text-align: right; font-size: 18px; border-bottom: 1px solid #000000;">	
+				<td style="width: 16%; padding: 5px 5px 5px 0px;">
+					<b>מס' משתמש</b>
+				</td>
+				<td style="width: 16%; padding: 5px 5px 5px 0px;">
+					<b>שם</b>
+				</td>
+				<td style="width: 16%; padding: 5px 5px 5px 0px;">
+					<b>טלפון</b>
+				</td>
+				<td style="width: 16%; padding: 5px 5px 5px 0px;">
+					<b>מייל</b>
+				</td>
+				<td style="width: 16%; padding: 5px 5px 5px 0px;">
+					<b>כתובת</b>
+				</td>
+				<td style="width: 16%; padding: 5px 5px 5px 0px;">
+					<b></b>
+				</td>
+			</tr>
+		<% for(i=0; i<users.length; i++) { %>
+			<% worker=users[i];%>
+			<% if (worker.category == "worker" && worker.isActive == 1) { %>
+			<tr style="text-align: right; font-size: 15px; border-bottom: 1px solid #000000;">	
+				<td style="padding: 5px 5px 5px 0px;">
+					<%= worker.id %>
+				</td>
+				<td style="padding: 5px 5px 5px 0px;">
+					<%= worker.name %>
+				</td>
+				<td style="padding: 5px 5px 5px 0px;">
+					<%= worker.tel %>
+				</td>
+				<td style="padding: 5px 5px 5px 0px;">
+					<%= worker.email %>
+				</td>
+				<td style="padding: 5px 5px 5px 0px;">
+					<%= worker.address %>
+				</td>
+				<td style="padding: 5px 5px 5px 0px;">
+					<% if (connectUser.category == "worker" && worker.email != connectUser.email) { %>
+					<button class="removeUser" id=<%= worker.email %> style="background-color:#da0e00">הסר 
+					</button>
+					<% } %>
+				</td>
+			</tr>
+		<% } %>
+		<% } %>
+		</table>
+		</div>
+		<br/>
+		<br/>
+	</div>
+			
+	<div id="connectEmail" value=<%=connectUser.email%> ></div>
+</div>				
+<script>
+	$(document).ready(function(){
+	
+		$(".removeUser").click(function(e) {
+			e.preventDefault();
+			var em = $(this).attr("id");
+			//$("#status").html("בתהליך הסרה");
+			//$("#status").css('color', 'red');
+			//$(".textLoader").html('בתהליך הסרה...');
+			//$(".loadingDiv").show();
+			$.ajax({
+				url: '/removeUser/'+ $("#connectEmail").attr("value"),
+				type: 'POST',
+				data: { em: em},
+				success: function(res){
+					$(".loadingDiv").hide();
+					$('#mainContent').html(res);
+					//$("#status").html("פוטר");
+					//$("#status").css('color', 'green');
+				},
+				timeout: 4000,
+				error: function(res, e ,typeErr){	
+					//$(".loadingDiv").hide();
+					alert("error - " + typeErr);	
+				}
+			});
+		});
+		
+		$(".fire").click(function(e) {
+			e.preventDefault();
+			var em = $(this).attr("id");
+			$("#status").html("בתהליך פיטור");
+			$("#status").css('color', 'red');
+			$.ajax({
+				url: '/fire/'+ $("#connectEmail").attr("value"),
+				type: 'POST',
+				data: { em: em},
+				success: function(res){
+					$('main').html(res);
+					$("#status").html("פוטר");
+					$("#status").css('color', 'green');
+				},
+				timeout: 4000,
+				error: function(res, e ,typeErr){	
+					alert("error - " + typeErr);	
+				}
+			});
+			/*$.post('/fire/'+ $("#connectEmail").attr("value"), { em: em}, function(res){
+				$('main').html(res);
+				$("#status").html("פוטר");
+				$("#status").css('color', 'green');
+			});*/
+		});
+		
+		$(".promotion").click(function(e) {
+			e.preventDefault();
+			var em = $(this).attr("id");
+			$("#status").html("שינוי עובד למנהל");
+			$("#status").css('color', 'red');
+			$.ajax({
+				url: '/promotion/'+ $("#connectEmail").attr("value"),
+				type: 'POST',
+				data: { em: em},
+				success: function(res){
+					$('main').html(res);
+					$("#status").html("עודכן");
+					$("#status").css('color', 'green');
+				},
+				timeout: 4000,
+				error: function(res, e ,typeErr){	
+					alert("error - " + typeErr);	
+				}
+			});
+			/*$.post('/promotion/'+ $("#connectEmail").attr("value"), { em: em}, function(res){
+				$('main').html(res);
+				$("#status").html("עודכן");
+				$("#status").css('color', 'green');
+			});*/
+		});
+		
+		$(".down").click(function(e) {
+			e.preventDefault();
+			var em = $(this).attr("id");
+			$("#status").html("שינוי מנהל לעובד");
+			$("#status").css('color', 'red');
+			$.ajax({
+				url: '/down/'+ $("#connectEmail").attr("value"),
+				type: 'POST',
+				data: { em: em},
+				success: function(res){
+					$('main').html(res);
+					$("#status").html("עודכן");
+					$("#status").css('color', 'green');
+				},
+				timeout: 1000,
+				error: function(res, e ,typeErr){	
+					alert("error - " + typeErr);	
+				}
+			});
+			/*$.post('/down/'+ $("#connectEmail").attr("value"), { em: em}, function(res){
+				$('main').html(res);
+				$("#status").html("עודכן");
+				$("#status").css('color', 'green');
+			});*/
+		});
+		
+	});
+	
+	function mySearchFunctionClient() { 
+	  var input, filter, table, tr, td, i;
+	  input = document.getElementById("mySearchClient");
+	  filter = input.value.toUpperCase();
+	  table = document.getElementById("clientsTable");
+	  tr = table.getElementsByTagName("tr");
+	  for (i = 0; i < tr.length; i++) {
+		td = tr[i].getElementsByTagName("td")[1];
+		if (td) {
+		  if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+			tr[i].style.display = "";
+		  } else {
+			tr[i].style.display = "none";
+		  }
+		}       
+	  }
+	}
+	
+	function mySearchFunctiondeliver() { 
+	  var input, filter, table, tr, td, i;
+	  input = document.getElementById("mySearchdeliver");
+	  filter = input.value.toUpperCase();
+	  table = document.getElementById("deliverTable");
+	  tr = table.getElementsByTagName("tr");
+	  for (i = 0; i < tr.length; i++) {
+		td = tr[i].getElementsByTagName("td")[1];
+		if (td) {
+		  if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+			tr[i].style.display = "";
+		  } else {
+			tr[i].style.display = "none";
+		  }
+		}       
+	  }
+	}
+	
+	function mySearchFunctionWorker() { 
+	  var input, filter, table, tr, td, i;
+	  input = document.getElementById("mySearchWorker");
+	  filter = input.value.toUpperCase();
+	  table = document.getElementById("workerTable");
+	  tr = table.getElementsByTagName("tr");
+	  for (i = 0; i < tr.length; i++) {
+		td = tr[i].getElementsByTagName("td")[1];
+		if (td) {
+		  if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+			tr[i].style.display = "";
+		  } else {
+			tr[i].style.display = "none";
+		  }
+		}       
+	  }
+	}
+</script>

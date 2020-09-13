@@ -1,0 +1,218 @@
+<!DOCTPYE html>
+<html>
+   <head>
+	   <script src="/socket.io/socket.io.js"></script>
+	   
+	   <style>
+		 
+		   .chat-form {
+			margin-top: 20px;
+			   display: flex;
+			   align-items: flex-start;
+		   }
+
+		   .chat-form textarea {
+			   background: #fbfbfb;
+			   width: 75%;
+			   height: 50px;
+			   border: 2px solid #eee;
+			   border-radius: 3px;
+			   resize: none;
+			   padding: 10px;
+			   font-size: 18px;
+			   color: #333;
+			   direction: rtl;
+		   }
+
+		   .chat-form textarea:focus {
+			   background: #fff;
+		   }
+
+		   .chat-form textarea::-webkit-scrollbar {
+			   width: 10px;
+		   }
+
+		   .chat-form textarea::-webkit-scrollbar-thumb {
+			   border-radius: 5px;
+			   background: rgba(0,0,0,.1);
+		   }
+
+		   .chat-form button {
+			   /*background: #1ddced;*/
+			   background: #da0e00;
+			   padding: 5px 15px;
+			   font-size: 26px;
+			   color: #fff;
+			   border: none;
+			   margin: 3px 10px 10px 10px;
+			   border-radius: 3px;
+			   /*box-shadow: 0 3px 0 #da0e00;*/
+			   cursor: pointer;
+			   
+			   -webkit-transition: background .2s ease;
+			   -moz-transition: background .2s ease;
+			   -o-transition: background .2s ease;
+			   
+		   }
+
+		   .chat-form button:hover {
+			   /*background: #13c8d9;*/
+			   background: #da0e00;
+		   }
+		   
+		   .online-users {
+			   width: 160px;
+			   text-align: right;
+			   height: 500px;
+			   background: #fff;
+			   padding: 5px;
+			   margin: 0px;
+			   box-shadow: 0 3px #ccc;
+			   border: 2px solid #eee;
+			   direction: rtl;
+		   }
+		   
+		   .chatlogs {
+			   padding: 10px;
+			   width: 100%;
+			   height: 380px;
+			   /*background: #eee;*/
+			   overflow-x: hidden;
+			   overflow-y: scroll;
+		   }
+
+		   .chatlogs::-webkit-scrollbar {
+			   width: 10px;
+		   }
+
+		   .chatlogs::-webkit-scrollbar-thumb {
+			   border-radius: 5px;
+			   background: rgba(0,0,0,.1);
+		   }
+		   
+		   .chatbox {
+			   width: 500px;
+			   min-width: 390px;
+			   height: 500px;
+			   background: #fff;
+			   padding: 25px;
+			   margin: 20px auto;
+			   box-shadow: 0 3px #ccc;
+			   border: 2px solid #eee;
+		   }
+
+		   .chat {
+			   display: flex;
+			   flex-flow: row wrap;
+			   align-items: flex-start;
+			   margin-bottom: 10px;
+		   }
+		   
+	   </style>
+   </head>
+   
+   <body style="border-radius: 20px;">
+	   <div class="container">
+	   
+		   <table id="chatArea" style="border-radius: 20px;">
+			   <tr>
+				   <td style="text-align: right;">
+					   <div class="online-users">
+						   <h4 style="color: #555555; direction:rtl"><b>משתמשים מחוברים</b></h3>
+						   <ul dir="rtl" class="list-group" id="users"></ul>
+					   </div>
+				   </td>
+				   <td>
+					   <div class="chatbox">
+						   <div class="chatlogs" id="chat">
+						   </div>
+						   <form id="messageForm">
+							   <div class="chat-form">
+								   <textarea id="message"></textarea>
+								   <button>שלח</button>
+								   <br />							
+							   </div>
+						   </form>
+					   </div>
+				   </td>					
+			   </tr>
+		   </table>
+	   
+	   </div>
+<script>
+$(function() {
+   var socket = io.connect(); 
+   var $messageForm = $('#messageForm');
+   var $message = $('#message');
+   var $chat = $('#chat');		
+   var $messageArea = $('#messageArea');
+   var $userForm = $('#userForm');
+   var $users = $('#users');
+   var $username = $('#username');
+
+   $messageForm.submit(function(e){
+	   e.preventDefault();
+	   //console.log('Submitted');
+	   //alert(socket.username)
+	   socket.emit('send message', $message.val(), $("#connectName").attr("value"), $("#connectId").attr("value"));
+	   $message.val('');
+   });
+   
+   socket.on('clear message', function(data) {
+	   $chat.html('');
+   });
+   
+   socket.on('new message', function(data) {
+	   switch (data.cat){
+		   case 'worker': $chat.append('<div style="background: rgba(218,14,0,0.6); order: -1;'+
+						   'width: 100%; padding: 10px 15px 10px 15px; margin: 5px -10px 0; border-radius: 10px;'+
+						   'color: #fff; font-size: 18px; text-align: right; direction: rtl;'+
+						   '"><strong>'+data.user+'</strong>: '+data.msg+'<div style="margin-top: -20px; width: 100%; font-size: 13px;text-align: left;">עובד</div></div>');
+						   
+						   var elem = document.getElementById('chat');
+							 elem.scrollTop = elem.scrollHeight;
+			   break;
+		   case 'deliver': $chat.append('<div style="background: rgba(150,150,150,0.6); order: -1;'+
+						   'width: 100%; padding: 10px 15px 10px 15px; margin: 5px -10px 0; border-radius: 10px;'+
+						   'color: #fff; font-size: 18px; text-align: right; direction: rtl;'+
+						   '"><strong>'+data.user+'</strong>: '+data.msg+'<div style="margin-top: -20px; width: 100%; font-size: 13px;text-align: left;">ברמן</div></div>');
+						   
+						   var elem = document.getElementById('chat');
+							 elem.scrollTop = elem.scrollHeight;
+			   break;
+		   case 'client': $chat.append('<div style="background: rgba(50,9,9,0.6); order: -1;'+
+						   'width: 100%; padding: 10px 15px 10px 15px; margin: 5px -10px 0; border-radius: 10px;'+
+						   'color: #fff; font-size: 18px; text-align: right; direction: rtl;'+
+						   '"><strong>'+data.user+'</strong>: '+data.msg+'<div style="margin-top: -20px; width: 100%; font-size: 13px;text-align: left;">לקוח</div></div>');
+						   
+						   var elem = document.getElementById('chat');
+							 elem.scrollTop = elem.scrollHeight;
+			   break;
+	   
+	   }
+   });
+   
+   socket.on('get users', function(data) {
+	   var html = '';
+	   for(var i=0; i < data.length; i++) {
+		   switch (data[i].category){
+			   case 'worker': 
+				   html += '<li id="'+data[i]+'" style="margin-right:-38px; color: #555555;"><b>'+data[i].userName+' - '+
+				   'עובד</b><hr style="border-style: inset; border-width: 1px; padding: 0; margin:0;"></li>';
+				   break;
+			   case 'deliver':
+				   html += '<li id="'+data[i]+'" style="margin-right:-38px; color: #555555;"><b>'+data[i].userName+' - '+
+				   'ברמן</b><hr style="border-style: inset; border-width: 1px; padding: 0; margin:0;"></li>';
+				   break;
+			   case 'client':
+				   html += '<li id="'+data[i]+'" style="margin-right:-38px; color: #555555;"><b>'+data[i].userName+' - '+
+				   'לקוח</b><hr style="border-style: inset; border-width: 1px; padding: 0; margin:0;"></li>';
+				   break;
+		   }					
+	   }
+	   $users.html(html);
+   });			
+});
+</script>
+   </body>
+</html>

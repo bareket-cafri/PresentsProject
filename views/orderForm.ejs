@@ -1,0 +1,155 @@
+<style>	:: placeholder {
+  color: red;
+  opacity: 1; /* Firefox */
+}
+</style>
+
+<div style="  width: 400px; padding: 20px 20px 20px 20px;  background-color:gold">
+	<div style="text-align: center; color:black; font-size: 16px; padding: 0px 40px 20px 40px; border-right: 2px solid red;">
+			<form style="text-align: right;">
+				<span style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; font-size: 20px; color:rgb(197, 19, 19);" ><b>פרטי משלוח</b></span>
+				<table style="width: 100%; direction:rtl; text-align: right;">
+					<tr >
+						<td style="padding-top: 6px;">
+							<div  >שם:</div>
+						</td>
+						<td style="padding-top: 6px;">
+							<span  ><%=connectUser.name%></span>
+						</td>
+					</tr>
+					<tr >
+						<td style="padding-top: 6px;">
+							<div>טלפון:</div>
+						</td>
+						<td style="padding-top: 6px;">
+							<span><%=connectUser.tel%></span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div>כתובת:</div>
+						</td>
+						<td >
+							<input type="text" id="addressInput" class="form-control" id="address" style=" color:black;  width:auto;" placeholder="כתובת למשלוח">
+						</td>
+					</tr>
+				</table>
+				
+				<div style="padding-top: 15px; padding-bottom: 6px;">
+				<span style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; font-size: 20px; color:rgb(197, 19, 19);"><b>פריטים</b></span>
+			</div>
+				
+				<table id="itemList" style="width: 100%; direction:rtl; text-align: right;">
+				
+				</table>
+				<div style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; font-size: 20px; text-align: left; margin-top: 15px; color:rgb(197, 19, 19);
+				"><b>מחיר כולל:</b>
+					<span id="totalOrderCost" style="border: 1px solid ;color:rgb(197, 19, 19);font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+					padding: 5px 10px 5px 10px;">0 ש"ח</span></div>
+				<div style="width: 100%;  text-align: center;">
+				    <button id="addNewOrder"  style=" background-color:rgb(197, 19, 19);
+					margin-top: 15px; color:#ffffff;font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; font-size:17px;">בצע הזמנה</button>
+				</div>
+			</form>
+		</div>
+		</div>
+	<div id="connectEmail" value=<%=user_email%> ></div>
+	
+
+		
+<script>
+	var itemsToOrder = [];
+	var OrderCost = 0;
+	
+	function changeItemList(){
+		var sum=0;
+		//alert("changeItemList");
+		$("#itemList").html('');
+		for(var i=0; i<itemsToOrder.length; i++) {
+			$("#itemList").append('<tr><td><label>'+itemsToOrder[i].name+'</label></td><td><label>'+itemsToOrder[i].cost+' ש"ח</label></td></tr><br/>');
+			sum+=itemsToOrder[i].cost;
+		}
+		$('#totalOrderCost').html(sum + ' ש"ח');
+		OrderCost = sum;
+	}
+	
+	$("#addNewOrder").click( function(e) { //remove food
+		e.preventDefault();	
+		//alert("y");
+		//alert($("#connectEmail").attr("value"));
+		if ( $("#addressInput").val() == ""){
+			alert("נא הכנס מספר שולחן");
+			return;
+		}
+		$.ajax({
+				url: '/addNewOrder/'+ $("#connectEmail").attr("value"),
+				type: 'POST',
+				data: {	address: $("#addressInput").val(),
+						hour: '',
+						cost: OrderCost,
+						items: itemsToOrder						
+				},
+				success: function(html){
+					//$('#mainContent').html(html);
+					alert("ההזמנה בוצעה בהצלחה");
+					$.get('/menu/'+$("#connectEmail").attr("value"), function(html) {
+						$('#mainContent').html(html);
+					});
+					$.get('/orderForm/'+$("#connectEmail").attr("value"), function(html) {
+						$('#leftContent').html(html);
+					});
+					
+				},
+				error: function(res, e ,typeErr){
+					alert("error - " + typeErr);	
+				}
+			});
+	});
+	
+	/*angular.module('orderFormMo', [])
+	.controller('orderFormController', function ($scope, $http) {
+		alert(1)
+		$scope.items = [
+			{ name: 'yossi', cost: 2 },
+			{ name: 'avi', cost: 50 },
+			{ name: 'beni', cost: 25 },
+			{ name: 'dani', cost: 37 }
+		];
+	});*/
+	/*.factory('orderFormFactory', function () {
+		var items = [
+			{ name: 'yossi', cost: 2 },
+			{ name: 'avi', cost: 50 },
+			{ name: 'beni', cost: 25 },
+			{ name: 'dani', cost: 37 }
+		];
+		
+		var factory = {};
+		factory.getItems = function () {
+			return items;
+		};
+		
+		return factory;
+	})
+	.controller('orderFormController', function ($scope ,orderFormFactory) {
+		$scope.items = [];
+		alert("1");
+		init();
+		
+		function init() {
+			$scope.items = orderFormFactory.getItems();
+		}
+	});*/
+
+</script>
+
+
+
+
+
+
+
+
+
+
+

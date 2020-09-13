@@ -1,0 +1,155 @@
+<!-- views/orders.ejs -->
+<style>
+div {
+   color:black;
+}
+</style>
+		<div class="container" style="direction: rtl; padding-right: 80px;"> 
+			<table style="width: 100%;">
+				<tr style="text-align: right; font-size: 18px; border-bottom: 1px solid #d1d1d1;">	
+					<td style="padding: 5px 5px 5px 0px;">
+						<b>מס' הזמנה</b>
+					</td>
+					<td style="padding: 5px 0px 5px 0px;">
+						<b>פרטי לקוח</b>
+					</td>
+					<td style="padding: 5px 0px 5px 0px;">
+						<b>פרטי ברמן</b>
+					</td>
+					<td style="padding: 5px 0px 5px 0px;">
+						<b>פריטים</b>
+					</td>
+					<td style="padding: 5px 0px 5px 0px;">
+						<b>עלות כוללת</b>
+					</td>
+					<td style="padding: 5px 0px 5px 0px;">
+						<b>מצב ההזמנה</b>
+					</td>
+					<td style="padding: 5px 0px 5px 0px;">
+					</td>
+				</tr>
+			<% for(i=orders.length-1; i>=0; i--) { %>
+                <% if(orders[i].isActive == true) { %>
+					<% order=orders[i];%>
+					<tr style="text-align: right; font-size: 15px; border-bottom: 1px solid #d1d1d1;">	
+						<td style="padding: 5px 5px 5px 0px;">
+							<%= order.id %>
+						</td>
+						<td style="padding: 5px 0px 5px 0px;">
+							<b>שם: </b><%= order.client.name %><br/>
+							<b>טל': </b><%= order.client.tel %><br/>
+							<b>מספר שולחן: </b><%= order.address %><br/>
+						</td>
+						<td style="padding: 5px 0px 5px 0px;">
+							<% if ((order.deliver.name) != "") { %>
+							<b>שם: </b><%= order.deliver.name %><br/>
+							<b>טל': </b><%= order.deliver.tel %><br/>
+							<% } else {%>
+								<select id="sel<%=order.id%>" style="color: #555555; height: 30px;">
+									<option value="-1" style="color: #555555; height: 30px;"> בחר ברמן</option>
+									<% for(k=0; k<delivers.length; k++) { %>
+										<option value="<%=delivers[k].id%>"><%=delivers[k].name%></option>
+									<% } %>
+								</select>
+								<button class="choosedeliver" id=<%=order.id%> style="background-color:#da0e00; font-size:15px;">בחר</button>
+							<% } %>
+						</td>
+						<td style="padding: 5px 0px 5px 0px;">
+							<% for(j=0; j<order.items.length; j++) { %>
+								<% item=order.items[j];%>
+								<%= item.name %> - <%= item.cost %> ש"ח <br/>
+							<% } %>
+						</td>
+						<td style="padding: 5px 0px 5px 0px;">
+							<%= order.cost %> ש"ח
+						</td>
+						<td style="padding: 5px 0px 5px 0px;">
+							<%switch (order.statusO) {
+								case 0:%> מחכה לאישור
+								<% break; case 1:%> אושרה
+								<% break; case 2:%> בהכנה
+								<% break; case 3:%> בדרך
+								<% break; case 4:%> נמסרה
+								<% break; %>
+							<% }%>
+						</td>
+						<td style="padding: 5px 0px 5px 0px;">
+							<%switch (order.statusO) {
+								case 0:%><button class="changeStatus" id=<%=order.id%> style="background-color:#da0e00; font-size:17px;">אישור הזמנה</button>
+								<button class="rejectOrder" id=<%=order.id%> style="background-color:#da0e00; font-size:17px;">דחיית הזמנה</button>
+								<% break; case 1:%><button class="changeStatus" id=<%=order.id%> style="background-color:#da0e00; font-size:17px;">בהכנה</button>
+								<% break; case 4:%><button class="changeStatus" id=<%=order.id%> style="background-color:#da0e00; font-size:17px;">סגור הזמנה</button>
+								<% break; %>
+							<% }%>
+						</td>
+					</tr>
+				<% } %>
+			<% } %>
+			</table>
+<script>
+	$(document).ready(function(){
+		$(".rejectOrder").click(function(e) {
+			e.preventDefault();
+			$.ajax({
+				url: '/rejectOrder',
+				type: 'POST',
+				data: { orderId: $(this).attr("id") },
+				success: function(res) {
+					$.get('/orders', function(html){
+					$('#mainContent').html(html);
+				});
+				},
+				timeout: 4000,
+				error: function(res, e ,typeErr){	
+					alert("error - " + typeErr);	
+				}
+			});
+		});
+		
+		$(".changeStatus").click(function(e) {
+			e.preventDefault();
+			$.ajax({
+				url: '/changeStatus',
+				type: 'POST',
+				data: { orderId: $(this).attr("id") },
+				success: function(res) {
+					$.get('/orders', function(html){
+					$('#mainContent').html(html);
+				});
+				},
+				timeout: 4000,
+				error: function(res, e ,typeErr){	
+					alert("error - " + typeErr);	
+				}
+			});
+		});
+		
+		$(".choosedeliver").click(function(e) {
+			e.preventDefault();
+			orderNum = $(this).attr("id");
+			var selId = "#sel" + orderNum;
+			//alert($(selId).val());
+			if ($(selId).val() != -1 ){
+				$.ajax({
+					url: '/choosedeliver/' + orderNum ,
+					type: 'POST',
+					data: { deliverId: $(selId).val() },
+					success: function(res) {
+						$.get('/orders', function(html){
+						$('#mainContent').html(html);
+					});
+					},
+					timeout: 4000,
+					error: function(res, e ,typeErr){	
+						alert("error - " + typeErr);	
+					}
+				});
+			}
+		});
+	});
+</script>		
+		
+		
+		
+		
+		

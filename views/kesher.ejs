@@ -1,0 +1,75 @@
+<!-- views/kesher.ejs -->
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+<div  class="container" style="padding-right: 50px; direction: rtl;"> 
+	<table style="width: 100%;">
+	<tr style="width: 100%; vertical-align: top;">
+	
+
+	<td >
+	
+		<b style="font-size: 30px; color:red; margin: 5px 5px 5px 5px; ">נשמח לעמוד לרשותכם בכל נושא ופנייה </b><br/>
+		<div style="font-size: 19px; text-align: right; color:red;">
+			<div style="margin: 5px 5px 10px 5px;">
+			<b>טל': </b>
+			02-6459988
+			<br/>
+			</div>
+			<div style="margin: 5px 5px 5px 5px;">
+			<b>שעות הפעילות: </b>
+					<br/>
+					<div style="margin: 5px 5px 10px 5px;">
+					בימים א-ה : 8:00-23:00
+					<br/>
+					</div>
+					<div style="margin: 5px 5px 10px 5px;">
+					ביום ו: 8:00-14:00
+					<br/>
+					</div>
+					<div style="margin: 5px 5px 10px 5px;">
+					מוצ"ש  : חצי שעה לאחר צאת שבת-23:00
+					</div>
+			</div>
+		
+	</div>
+	</td>
+	<td>
+	<div style="width: 400px; text-align: right;">
+	<i id="chatt" class='far fa-comment' style='font-size:48px; margin-top: 20px; color:red'></i>
+		<!--<button id="chatt" style="background-color: #444444; color: #aaaaaa;" >לשליחת הודעה</button>-->
+		<div id = "chatWindow" style="padding: 0; margin-right: -70px; margin-top: -20px;  border-radius: 20px;">
+			<% include chatWin %>
+		</div>
+	</div>
+	</td>
+	</tr>
+	</table>
+</div>
+<br/>
+	
+	
+	<div id="connectId" value=<%=connectId%> ></div>
+	<div id="connectName" value="<%=connectName%>" ></div>
+	<div id="connectCat" value="<%=connectCat%>"></div>
+<script>
+		if(($("#connectId").attr("value")) == 0){
+			$("#chatt").hide();
+		}
+		$("#chatWindow").hide();
+
+	
+	var $messageArea = $('#messageArea');
+	$("#chatt").click( function(e) {
+			e.preventDefault();
+			var socket = io.connect(); 
+			socket.emit('new user', $("#connectName").attr("value"), $("#connectId").attr("value"), $("#connectCat").attr("value"), function(data) {
+				if(data) {
+					//alert(data)
+					//$userFormArea.hide();
+					$("#chatt").hide();
+					$messageArea.show();
+				}
+			});
+			$("#chatWindow").show();
+		});
+</script>

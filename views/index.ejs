@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<!-- views/.ejs -->
+<html lang="en"  >
+
+<head>
+    <% include partials/head %>
+
+</head>
+	<% include loader %>
+
+<body  id="body" onload="myFunction()" ng-app="appM" class="container" style="width: 100%;  " >
+	
+   <script src="javascripts/angular.min.js"></script>
+   <script src="javascripts/app.js"></script>
+   <script src="javascripts/controllers/headerController.js"></script>
+   <script src="javascripts/controllers/usersController.js"></script>
+
+   <header id="indexHeader" >
+		<% include partials/header %>
+		
+    </header>
+    <main id="myMain" style=" position:absolute; top: 150px; right:30px; left: 30px; " >
+	
+		
+		
+	
+		<table style="width: 100%; height: 480px;">
+			<tr >				
+				<td id="leftContent" style="vertical-align: top; padding-top:20px; width: 30%;">
+				</td>
+				
+				<td id="mainContent"  style= "vertical-align: top; padding-top:20px; width: 70%; ">
+				</td>
+			</tr>
+		</table>   
+	
+	
+    </main>
+	<footer >
+		<% include partials/footer %>
+	</footer>	
+</body>
+
+
+</html>
+

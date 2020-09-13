@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en"  >
+<!-- views/partials/header.ejs -->
+<style>
+.navbar-nav li a:hover {
+	background-color: rgb(136, 141, 148) !important;
+	
+  }
+
+
+</style>
+
+<div ng-controller="loginController" >
+	<div id="title" style="height: 100px; position:absolute;  right: 0px; left: 0px; background-color: rgb(54, 53, 51); ">
+		<img  src="images/outOfbox.png"  style="height: 100px;  margin-left: 60px ; padding-top: 10px; padding-bottom:5px ;"/>
+	</div>
+	<!--<span ng-show="tryShow" style="color: white;"> try show </span>-->
+	<nav class="navbar navbar-inverse"
+		style="position:absolute; top: 100px; font-size: 18px;  right: 0px; left: 0px; background-color: rgb(230, 172, 49); border: white; border-radius: 0%;">
+	  <div class="container-fluid" >
+		<div class="navbar-header">
+		  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>                        
+		  </button>
+		</div>
+		<div class="collapse navbar-collapse" id="myNavbar"  >
+		 
+		  <ul id="navRight" class="nav navbar-nav navbar-right">
+				<li><a style="color:black;"  right: 0px; href="#"   class="screenLinks" ng-click="openKesher()"><b>צור קשר</b> <span class="glyphicon glyphicon-earphone"></span></a></li>
+				<li><a style="color:black;"  href="#"  class="screenLinks" ng-click="screenLink('about')"><b>אודות</b> <span class="glyphicon glyphicon-info-sign"></span></a></li>
+				<li>
+					<a style="color:black;"href="#" class="dropdown-toggle" ng-show="toUsers" data-toggle="dropdown"><b>משתמשים</b> <span class="glyphicon glyphicon-list"></span></a>
+					<ul class="dropdown-menu" style="padding: 0; background-color: rgb(230, 172, 49); font-size: 17px;">
+						<li style="text-align: right; height: 40px; padding: 0;"><a class="screenLinksWithParams" href="#" ng-click="screenLinksWithP('users')" style="padding-top:9px; padding-bottom:8px;"><b>כל המשתמשים</b></a></li>
+						<li style="text-align: right; height: 40px; padding: 0;" ng-show="isWorker"><a class="screenLinksWithParams" href="#" ng-click="screenLinksWithP('adduserLink')" id="addUstn" style="padding-top:8px; padding-bottom:9px;"><b>הוספת משתמש</b></a></li>
+					</ul>				
+				</li>
+				<li><a style="color:black;"class="screenLinks" href="#" ng-show="isWorker" ng-click="screenLink('orders')"><b>הזמנות</b> <span class="glyphicon glyphicon-shopping-cart"></span></a></li>
+				<li><a style="color:black;"class="screenLinks" href="#" ng-show="isWorker" ng-click="screenLink('addPro')"><b>הוספת פריט</b> <span class="glyphicon glyphicon-plus-sign"></span></a></li>
+				<li><a style="color:black;"id="myOrders" href="#" ng-show="isClient" ng-click="showOrders('myOrders')" ><b>ההזמנות שלי</b> <span class="glyphicon glyphicon-shopping-cart"></span></a></li>
+				<li><a style="color:black;"id="deliverOrders" href="#" ng-show="isDeliver" ng-click="showOrders('deliverOrders')"><b>ההזמנות שלי</b> <span class="glyphicon glyphicon-shopping-cart"></span></a></li>
+				<li><a style="color:black;"id="menu" href="#" ng-click="openMenu()"><b>מוצרים</b> <span class="glyphicon glyphicon-gift"></span></a></li>
+			</ul>
+		  
+		  <ul class="nav navbar-nav">
+			<li class="dropdown dropdown-toggle" data-toggle="dropdown" id="menuLogin" >
+				<a style="color:black;"  href="#"  class="dropdown-toggle" ng-show="!isConnect" data-toggle="dropdown" id="navLogin"><b>התחבר</b> <span class="glyphicon glyphicon-log-in"></span></a>
+				<div id="dropdownLog"  class="dropdown-menu"  style="width: 250px; background-color: rgba(250,250,250,1); text-align: right; direction: rtl; padding:17px;">
+					<form  id="loginForm">
+						<div class="form-group">
+						  <input type="email" class="form-control" id="email" ng-model="loginForm.email" placeholder='דוא"ל'>
+						</div>
+						<div class="form-group">
+						  <input type="password" class="form-control" id="pass" ng-model="loginForm.password" placeholder="סיסמא">
+						</div>
+						
+						<button style="color:black;" id="loginbtn" ng-click="connect()" style="margin-right: 70px;" class="btn btn-default">התחבר</button>
+					</form>
+				</div>
+			  </li>
+				  <li class="dropdown dropdown-toggle" data-toggle="dropdown" id="menuSignup">
+					<a style="color:black;"class="dropdown-toggle" ng-show="!isConnect" href="#" data-toggle="dropdown" id="navSignup"><b>הרשם</b> <span class="glyphicon glyphicon-user"></span></a>
+					<div id="dropdownSign" class="dropdown-menu" style="width: 250px; background-color: rgba(250,250,250,1); text-align: right; direction: rtl; padding:17px;">
+						<form id="signupForm">
+							<div class="form-group">
+							  <input type="text" class="form-control" id="userName1" ng-model="signupForm.username" placeholder="שם">
+							</div>
+							<div class="form-group">
+							  <input type="password" class="form-control" id="pass1" ng-model="signupForm.password" placeholder="סיסמא">
+							</div>
+							<div class="form-group">
+							  <input type="email" class="form-control" id="email1" ng-model="signupForm.email" placeholder='דוא"ל'>
+							</div>
+							<div class="form-group">
+							  <input type="text" class="form-control" id="address1" ng-model="signupForm.address" placeholder='כתובת'>
+							</div>
+							<div class="form-group">
+							  <input type="number" class="form-control" id="tel1" ng-model="signupForm.phoneNumber" placeholder='טלפון'>
+							</div>
+							<!--<div class="checkbox">
+							  <input type="checkbox">
+							  <label style="margin-right: 20px;">זכור אותי</label>
+							</div>-->
+							<button id="signbtn" ng-click="signUp()" style="margin-right: 70px;" class="btn btn-default">הרשמה</button>
+						</form>
+					</div>
+				  </li>
+					<li><a style="color:black;" href="#" class="screenLinks" ng-show="isConnect" ng-click="logout()"><b>התנתק</b> <span class="glyphicon glyphicon-log-out"></span></a></li>
+					<li><a style="color:black;" href="#" class="screenLinksWithParams" ng-show="isConnect" id="myAccount" ng-click="screenLinksWithP('myAccount')"><b>החשבון שלי</b> <span class="glyphicon glyphicon-user"></span></a></li>
+					<li><a style="color:black;" href="#"  id="home" ng-click="openHome()"><b>עמוד הבית</b> <span class="glyphicon glyphicon-home"></span></a></li>
+		  </ul>
+		</div>
+	  </div>
+	</nav>
+</div>
+
+<script>
+	$( document ).ready(function() {
+		$(".loadingDiv").hide();
+	    $(".admin").hide();
+	    $(".client").hide();
+	    $(".worker").hide();
+	    $(".connect").hide();
+	    
+		$.get('/home', function(html){
+			$('#mainContent').html(html);
+		});
+		
+		$("#navLogin").click(function(){
+			$("#dropdownLog").toggle();
+			$("#dropdownSign").hide();
+		});
+		$("#navSignup").click(function(){
+			$("#dropdownSign").toggle();
+			$("#dropdownLog").hide();
+		});		
+	});
+</script>
+
+
+
+
+
+
+
+
+
+</html>
